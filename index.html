@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <style>
+        .todo-item{
+            border: 2px solid black;
+            padding: 5px;
+            margin: 5px;
+            background-color: bisque;
+            border-radius: 5px;
+            color: black;
+            font-size: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn{
+          background-color: black;  
+          color: white;
+          border-radius: 10px;
+          margin: 10px;
+          cursor: pointer;
+          font-size: 15px;
+        }
+        #task-container{
+            height: 250px;
+            overflow-y: scroll;
+           
+        }
+        .task-input-container{
+        display: flex;
+        justify-content: space-around;
+        margin: 10px;
+         padding: 5px;
+        
+        }
+        .btn-add{
+            border-radius: 30px;
+            background-color: black;
+            color: white;
+            padding: 5px 30px;
+        }
+        #task-input{
+           font-size: 15px;
+            width: 50%;
+            border-radius: 10px;
+            padding: 5px;
+            border: 2px solid black;
+        }
+    </style>
+</head> 
+<body>
+    <h1>TO DO APP</h1>
+    <div id="task-container">
+     </div>
+<div class="task-input-container">
+<input type="text" id="task-input" placeholder="Enter task">
+<button onclick="addTask()" class="btn-add">Add Task</button>
+</div>
+     <script>
+        const tasks = [];
+      function loadFromLocalStorage(){
+        const allTasks  = JSON.parse(localStorage.getItem('allTasks'));
+
+        if(allTasks){
+            tasks.push(...allTasks)
+        }
+      }
+      loadFromLocalStorage();
+
+        function loadTasks(){
+
+        localStorage.setItem('allTasks',JSON.stringify(tasks));
+
+         const tasksContainer = document.getElementById('task-container');
+         tasksContainer.innerHTML = '';
+
+         for (task of tasks){
+            tasksContainer.innerHTML += `
+            <div class="todo-item">
+                ${task}
+                <button class="btn" type="button" onclick="deleteTask('${task}')">Delete
+                    </button>
+                </div>
+                `
+         }
+        }
+        loadTasks();
+
+        function deleteTask(task){
+         const taskIndex = tasks.indexOf(task);
+         tasks.splice(taskIndex,1);
+
+         loadTasks();
+      }
+
+      function addTask(){
+        const taskInputElement = document.getElementById('task-input');
+        const task = taskInputElement.value;
+        if(!task){
+            alert('please enter a task');
+            return;
+        }
+        tasks.push(task);
+        loadTasks();
+        taskInputElement.value = '';
+      }
+        </script>
+</body>
+</html>
